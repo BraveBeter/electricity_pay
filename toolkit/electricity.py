@@ -63,13 +63,13 @@ class ElectricityManagement:
     recharge_url = "http://10.50.2.206/api/charge/Submit"
     get_room_url = "http://10.50.2.206/api/charge/GetRoom"
 
-    def __init__(self, session: requests.Session) -> None:
+    def __init__(self, session) -> None:
         self._session = session
         if not test_network():
             raise VPNError(
                 "you are not connected to the campus network, please turn on vpn"
             )
-        response = self._session.get(self.home_url)
+        response = self._session.get(self.home_url, allow_redirects=True)
         response.raise_for_status()
         dom = BeautifulSoup(response.text, features="html.parser")
 

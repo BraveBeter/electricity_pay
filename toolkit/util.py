@@ -5,6 +5,7 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date
 from queue import Queue
+import socks  # 需先 pip install PySocks
 
 import requests
 from bs4 import BeautifulSoup
@@ -23,27 +24,23 @@ class VPNError(Exception):
 
 
 def test_network(timeout: float = 0.5) -> bool:
-    """检测设备是否连接学校内网。
+    ip_addrs = [
+        "http://10.50.2.206",
+        "http://10.166.18.114",
+        "http://10.166.19.26",
+        "http://10.168.103.76",
+    ]
 
-    若超时时间小于 0.5 秒，则可能会有误报。
-    """
-    ip_addrs = ["10.50.2.206", "10.166.18.114", "10.166.19.26", "10.168.103.76"]
-    test_result = Queue()
-
-    def test_helper(addr: str) -> None:
+    ok = 0
+    for url in ip_addrs:
         try:
-            socket.create_connection((addr, 80), timeout=timeout)
-            test_result.put(1)
-        except TimeoutError:
+            requests.get(url, timeout=timeout)
+            ok += 1
+        except Exception:
+            print("can't connect to %s" % url)
             pass
 
-    with ThreadPoolExecutor(max_workers=5) as executor:
-        for addr in ip_addrs:
-            executor.submit(test_helper, addr)
-    count = 0
-    while not test_result.empty():
-        count += test_result.get()
-    return count / len(ip_addrs) >= 0.5
+    return ok / len(ip_addrs) >= 0.5
 
 
 def semester_week() -> int:
@@ -73,19 +70,10 @@ def get_resource_path(relative_path):
         base_path = os.path.abspath("..") # 或者 os.path.dirname(__file__)
     return os.path.join(base_path, relative_path)
 
-# === 加载配置 ===
-def load_config(path):
-    try:
-        with open(path, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except FileExistsError:
-        return {}
-
 __all__ = (
     "AuthServiceError",
     "VPNError",
     "test_network",
     "semester_week",
     "get_resource_path",
-    "load_config",
 )

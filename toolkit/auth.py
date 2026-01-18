@@ -1,15 +1,12 @@
 
 import time
-
 import requests
 from bs4 import BeautifulSoup
-from toolkit.util import load_config
 from toolkit.util import get_resource_path
 from toolkit.util import AuthServiceError
+import os
 
-config_path = get_resource_path("auto_pay_electricity\\toolkit\config.json")
-cfg = load_config(config_path)
-user_agent = cfg.get("user_agent")
+
 
 class AuthService:
     """登陆统一身份认证平台。"""
@@ -29,7 +26,7 @@ class AuthService:
         self._kwargs = kwargs
 
         self._session = requests.Session()
-        self._session.headers["User-Agent"] = user_agent
+        self._session.headers["User-Agent"] = os.getenv('FEE_UA', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0')
         response = self._session.get(
             self.login_url,
             params=self._kwargs,
@@ -121,6 +118,7 @@ class AuthService:
             and "CASTGC" in self._session.cookies
         ):
             raise AuthServiceError("wrong username or password")
+
 
     def logout(self) -> None:
         """退出登陆。"""
