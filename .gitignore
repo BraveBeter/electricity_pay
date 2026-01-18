@@ -5,3 +5,4 @@
 /.venv
 /toolkit/__pycache__
 /.idea
+.env
