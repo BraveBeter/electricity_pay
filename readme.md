@@ -1,20 +1,24 @@
+# SUEP一键充值电费程序
+
 ## 项目简介
 
-本项目提高了充电费的效率，只需要提供 学号、密码，楼栋号，房间号和充值数额，即可一键充值。并且自动登陆VPN（如果检测到未登录）。  
+本项目提高了充电费的效率，可实现一键充值。并且自动登陆VPN，使用Docker-EasyConnect实现静默登陆VPN，无需打开EasyConnect软件。
 
 ## 使用方法
-1. 请先修改`toolkit/config.json`文件，填写对应信息。
+
+1. 请先创建并修改`.env`，填写对应信息。
 2. 直接运行 `main.py`，输入信息即可使用。也使用pyinstaller进行打包，获得窗体程序后使用。
 
 > 注意：
-    一键充值，如果未登录校园网VPN，则会自动登录，但登录过程是用程序模拟点击，所以不能移动鼠标或键盘，否则可能失败。
-
+    本方法目前需要使用Docker-easyconnetc来进行EasyConnect的静默登录。**所以使用之前必须确保已经正确安装Docker**
 
 ## 鸣谢
 
+使用了[docker-easyconnect](https://github.com/docker-easyconnect/docker-easyconnect)实现静默登录EasyConnect
 使用了[SUEP-TOOKIT](https://github.com/zhengxyz123/suep-toolkit)的开源代码,在此基础上增加了一些功能，
 原项目采用MIT-LICENSE，本项目继承并遵循原项目的许可证。
 
 ## 声明
+
 **由于涉及充值花费，请使用者慎用。**
 由于使用本程序造成的损失，由使用者本人负责。
