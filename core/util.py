@@ -1,14 +1,17 @@
-import json
 import os
 import socket
+import subprocess
 import sys
-from concurrent.futures import ThreadPoolExecutor
+import time
 from datetime import date
-from queue import Queue
 import socks  # 需先 pip install PySocks
 
 import requests
 from bs4 import BeautifulSoup
+from requests import HTTPError
+
+from toolkit import auth, electricity
+from toolkit.electricity import RechargeInfo
 
 
 class AuthServiceError(Exception):
@@ -69,6 +72,56 @@ def get_resource_path(relative_path):
         # 开发环境或者未打包的情况
         base_path = os.path.abspath("..") # 或者 os.path.dirname(__file__)
     return os.path.join(base_path, relative_path)
+
+def login_service(username, password, site = "http://10.50.2.206:80/"):
+
+    """执行登陆，然后返回service对象"""
+
+    # service 必须与下面一行所展示的精确相符，都为 22 个字符！
+    service = auth.AuthService(username, password, service=site, renew="true")
+    # 是否需要输入验证码？
+    if service.need_captcha():
+        # 获取并保存验证码:
+        with open("captcha.jpg", "wb") as captcha_image:
+            captcha_image.write(service.get_captcha_image())
+        # 填写验证码:
+        service.set_captcha_code("验证码")
+    # 登陆:
+    try:
+        service.login()
+    except HTTPError as e:
+        print(e)
+    return service
+
+def pay_electricity(service, building_code, room, amount, delay)->RechargeInfo:
+    """根据房间号和金额充值电费以及用户service直接进行充值，并返回充值信息"""
+    time.sleep(delay)
+    em = electricity.ElectricityManagement(service.session)
+    # 充值电费
+    em.recharge(building_code, room, amount)
+    # 获取历次的电表充值账单：
+    all_payments = list(em.recharge_info)
+    service.logout()
+    return all_payments[0]
+
+def setup_global_proxy():
+    # 强制所有底层 socket 走 SOCKS5 代理
+    socks.set_default_proxy(socks.SOCKS5, "127.0.0.1", 1080)
+    socket.socket = socks.socksocket
+    print("✅ 全局 Socket 代理已配置")
+
+def ensure_docker_engine():
+    """检查 Docker Engine 是否启动，若未启动则尝试唤醒 Docker Desktop"""
+    try:
+        # 尝试运行一个简单的 docker 命令
+        subprocess.run(["docker", "info"], check=True, capture_output=True)
+        return True
+    except (subprocess.CalledProcessError, FileNotFoundError):
+        print("⚠️ 检测到 Docker 未启动，请先唤醒 Docker Desktop...")
+        # 常见的 Docker Desktop 安装路径
+        return False
+
+
 
 __all__ = (
     "AuthServiceError",
