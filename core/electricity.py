@@ -1,4 +1,4 @@
-# suep-toolkit, A toolkit for students at Shanghai University of Electric Power.
+# suep-core, A core for students at Shanghai University of Electric Power.
 #
 # Copyright (c) 2024 zhengxyz123
 #
@@ -25,9 +25,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Iterable
 
-import requests
 from bs4 import BeautifulSoup
-from toolkit.util import AuthServiceError, VPNError, test_network
+from core.util import AuthServiceError, VPNError, test_network
 
 
 @dataclass

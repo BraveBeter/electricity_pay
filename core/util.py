@@ -10,8 +10,8 @@ import requests
 from bs4 import BeautifulSoup
 from requests import HTTPError
 
-from toolkit import auth, electricity
-from toolkit.electricity import RechargeInfo
+from core import auth, electricity
+from core.electricity import RechargeInfo
 
 
 class AuthServiceError(Exception):
@@ -129,4 +129,8 @@ __all__ = (
     "test_network",
     "semester_week",
     "get_resource_path",
+    "login_service",
+    "pay_electricity",
+    "setup_global_proxy",
+    "ensure_docker_engine"
 )

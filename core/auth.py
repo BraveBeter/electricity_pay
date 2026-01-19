@@ -1,9 +1,7 @@
-
 import time
 import requests
 from bs4 import BeautifulSoup
-from toolkit.util import get_resource_path
-from toolkit.util import AuthServiceError
+from core.util import AuthServiceError
 import os
 
 
