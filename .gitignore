@@ -6,3 +6,5 @@
 /toolkit/__pycache__
 /.idea
 .env
+**/__pycache__
+data/*.json
