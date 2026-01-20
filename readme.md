@@ -4,13 +4,35 @@
 
 本项目提高了充电费的效率，可实现一键充值。并且自动登陆VPN，使用Docker-EasyConnect实现静默登陆VPN，无需打开EasyConnect软件。
 
+
 ## 使用方法
 
-1. 请先仿照`.env_example`创建并修改`.env`，填写对应信息。
-2. 直接运行 `main.py`，输入信息即可使用。也使用pyinstaller进行打包，获得窗体程序后使用。
+1. 基础准备
+- uv 
+- docker
+
+2. 安装依赖
+```bash
+   uv sync
+```
+3. 运行，注意必须在终端执行
+```bash
+   uv run main.py
+```
 
 > 注意：
     本方法目前需要使用Docker-easyconnetc来进行EasyConnect的静默登录。**所以使用之前必须确保已经正确安装Docker**
+
+## 项目技术
+| 相关技术资源       | 作用          |
+|--------------|-------------|
+| uv           | python包管理工具 |
+| request      | 发送web请求     |
+| BeautifulSoup | 解析网页内容      |
+| questionary  |实现控制台询问|
+|docker| 实现vpn的静默登录|
+|socket| 实现代理设置|
+
 
 ## 鸣谢
 
