@@ -6,3 +6,4 @@
 /core/__pycache__
 /.idea
 .env
+data/*.json
