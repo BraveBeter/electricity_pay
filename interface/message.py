@@ -20,7 +20,7 @@ class MenuMessage:
     # 选项
     OPT_INFO = "✏️ 信息管理"
     OPT_QUICK = "💰 快捷充值"
-    OPT_CHANGE = "⚙️  本次更改后充值"
+    OPT_CHANGE = "⚙️  单次更改充值信息后充电"
     OPT_RETURN = "🪄 回到上一级"
     OPT_EXIT = "❌ 退出程序"
     OPTS_LISTS = [OPT_INFO, OPT_QUICK, OPT_CHANGE, OPT_EXIT]

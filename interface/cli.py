@@ -187,7 +187,7 @@ class Terminal:
 
         self.vpn_manager.start_vpn(self.info_manager.vpn_info.username, self.info_manager.vpn_info.password)
         self.proxy_config = setup_global_proxy()
-        time.sleep(5)
+        time.sleep(8)
 
         while not self.vpn_manager.check_vpn_environment(self.proxy_config):
             print(VpnUserMessage.VPN_FAIL)
