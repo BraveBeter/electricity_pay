@@ -3,8 +3,8 @@
 /dist00
 /__pycache__
 /.venv
-/core/__pycache__
 /.idea
 .env
 data/*.json
 **/__pycache__
+
